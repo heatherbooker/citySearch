@@ -5,23 +5,23 @@ function executeOnSubmit() {
     //search text file
     var location = input.charAt(0).toUpperCase() + input.substring(1);
     console.log(location);
-    loadCityList(location);
-
 }
 
-function loadCityList(location) {
+function loadCityList() {
     $.ajax({
         type: "GET",
         dataType: "text",
         url: "cities.txt",
         success: function(data) {
-            search(data, location)
+
         },
         error: function(err) {
             console.log("uh oh spaghettis " + err);
         }
     });
 }
+
+loadCityList();
 
 function search(data, location) {
     var cityInList = data.search(location);

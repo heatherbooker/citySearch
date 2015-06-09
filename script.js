@@ -19,11 +19,24 @@ function loadCityList() {
         url: "cities.txt",
         success: function(data) {
             cityList = data;
+            organize(data);
         },
         error: function(err) {
             console.log("uh oh spaghettis " + err);
         }
     });
+
+    function organize(data) {
+        //a gazillion new cities
+    }
+
+    function City(id, name, lat, long, country) {
+        this.id = id;
+        this.name = name;
+        this.latitude = lat;
+        this.longitude = long;
+        this.country = country;
+    }
 }
 
 loadCityList();
@@ -31,19 +44,15 @@ loadCityList();
 function search(data, location) {
     var cityInList = data.search(location);
     if (cityInList >= 0) {
-        //print relevant info
         showCityInfo(data, cityInList);
     } else if (cityInList < 0) {
         display('are you sure that ' + location + ' exists?')
-    } else {
-        display('Im not really sure whats going on...')
     };
 }
 
 function showCityInfo(list, positionOfCityInList) {
-    display('it\'s in there somewhere! in fact, at position ' + positionOfCityInList);
     var isNotEndOfCityName = true;
-    var searchPosition = positionOfCityInList
+    var searchPosition = positionOfCityInList;
     var ANumber = 0;
     for (searchPosition; isNotEndOfCityName; searchPosition++) {
         ANumber = Number(list.charAt(searchPosition));

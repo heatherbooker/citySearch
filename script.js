@@ -1,3 +1,5 @@
+var cityList = "";
+
 function executeOnSubmit() {
     //get input
     var input = document.getElementById('city').value;
@@ -5,6 +7,9 @@ function executeOnSubmit() {
     //search text file
     var location = input.charAt(0).toUpperCase() + input.substring(1);
     console.log(location);
+
+    search(cityList, location);
+
 }
 
 function loadCityList() {
@@ -13,7 +18,7 @@ function loadCityList() {
         dataType: "text",
         url: "cities.txt",
         success: function(data) {
-
+            cityList = data;
         },
         error: function(err) {
             console.log("uh oh spaghettis " + err);

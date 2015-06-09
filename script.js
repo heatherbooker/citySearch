@@ -5,23 +5,22 @@ function executeOnSubmit() {
     //search text file
     var location = input.charAt(0).toUpperCase() + input.substring(1);
     var answer = 'dd';
-    loadXMLDoc();
+    loadCityList();
 
     //print to div
     document.getElementById('results').innerHTML = answer;
 }
 
+function loadCityList() {
+    $.ajax({
+        type: "GET",
+        dataType: "text",
+        url: "cities.txt",
+        success: function(data) {
 
-function loadXMLDoc() {
-    var xmlhttp = new XMLHttpRequest();
-
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            document.getElementById("invisible").innerHTML = xmlhttp.responseText;
+        },
+        error: function(err) {
+            console.log("uh oh spaghettis " + err);
         }
-    }
-    xmlhttp.open("GET", "cities.txt", true);
-    xmlhttp.send();
-    console.log('smthg is happening');
-    searchFile();
+    });
 }

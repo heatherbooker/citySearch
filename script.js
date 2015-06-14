@@ -6,7 +6,6 @@ function executeOnSubmit() {
 
     //search text file
     var location = input.charAt(0).toUpperCase() + input.substring(1);
-    console.log(location);
 
     search(cityList, location);
 
@@ -27,46 +26,55 @@ function loadCityList() {
     });
 
     function organize(data) {
-        //a gazillion new cities
+        var regex = '\n';
+        var arrayOfCities = data.split(regex);
+        var endOfArray = arrayOfCities.length;
+        makeCityObjects(0, endOfArray, arrayOfCities);
     }
 
-    function City(id, name, lat, long, country) {
-        this.id = id;
-        this.name = name;
-        this.latitude = lat;
-        this.longitude = long;
-        this.country = country;
+    function City(arrayOfProperties) {
+        this.id = arrayOfProperties[0];
+        this.name = arrayOfProperties[1];
+        this.latitude = arrayOfProperties[2];
+        this.longitude = arrayOfProperties[3];
+        this.country = arrayOfProperties[4];
+    }
+
+
+    function makeCityObjects(start, end, arrayOfCities) {
+        for (var i = start; i < end; i++) {
+            arrayOfCities[i] = arrayOfCities[i].split('	');
+            arrayOfCities[i] = new City(arrayOfCities[i]);
+        };
+        cityList = arrayOfCities;
     }
 }
 
 loadCityList();
 
-function search(data, location) {
-    var cityInList = data.search(location);
-    if (cityInList >= 0) {
-        showCityInfo(data, cityInList);
-    } else if (cityInList < 0) {
-        display('are you sure that ' + location + ' exists?')
-    };
-}
+function search(cityList, location) {
+    var isNotFound = true;
 
-function showCityInfo(list, positionOfCityInList) {
-    var isNotEndOfCityName = true;
-    var searchPosition = positionOfCityInList;
-    var ANumber = 0;
-    for (searchPosition; isNotEndOfCityName; searchPosition++) {
-        ANumber = Number(list.charAt(searchPosition));
-        if (!isNaN(ANumber)) {
-            console.log('found the end!');
-            isNotEndOfCityName = false;
-        } else if (searchPosition === positionOfCityInList + 50) {
-            isNotEndOfCityName = false;
+    for (var i = 0; isNotFound; i++) {
+
+        if (cityList[i].name === location) {
+            display(cityList[i]);
+            isNotFound = false;
+        } else if (cityList[i].name === undefined) {
+            document.getElementById('results').innerHTML = "City '" + location + "' Not Found";
+            isNotFound = false;
+        } else if (i === cityList.length) {
+            document.getElementById('results').innerHTML = "City '" + location + "' Not Found";
+            isNotFound = false;
         }
-    };
-    var info = list.substring(positionOfCityInList, searchPosition)
-    display(info);
+    }
 }
 
 function display(results) {
-    document.getElementById('results').innerHTML = results;
+    var showThis = 'City ID: ' + results.id;
+    showThis += '<br>City Name: ' + results.name;
+    showThis += '<br>City Latitude: ' + results.latitude;
+    showThis += '<br>City Longitude: ' + results.longitude;
+    showThis += '<br>Country Code: ' + results.country;
+    document.getElementById('results').innerHTML = showThis;
 }
